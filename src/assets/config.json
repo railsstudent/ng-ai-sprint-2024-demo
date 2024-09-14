@@ -10,5 +10,6 @@
             "path": "https://storage.googleapis.com/ai-sprint-2024/mediapipe-models/image-classifier/vision-classifier-food-v1.tflite"
         }
     ],
-    "maxResults": 3
+    "maxResults": 3,
+    "backendUrl": "http://localhost:3001"
 }
