@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ClassificationComponent } from './classification.component';
 import { GeneratedStoryComponent } from './generated-story.component';
 
@@ -10,7 +10,7 @@ import { GeneratedStoryComponent } from './generated-story.component';
     <div>
       <h2 class="title">Storytelling by MediaPipe Image Classifier Task and Gemma 2</h2>
       <app-classification />
-      <app-generated-story /> 
+      <app-generated-story [categories]="categories()" [story]="story()" /> 
     </div>
   `,
   styles: `
@@ -28,5 +28,6 @@ import { GeneratedStoryComponent } from './generated-story.component';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ClassificationContainerComponent {
-
+  categories = signal('No categories classified.');
+  story = signal('No story has generated.');
 }
