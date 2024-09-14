@@ -30,8 +30,8 @@ export class ImageClassificationService {
       throw new Error('No result.');
     }
 
-    return results.classifications[0].categories.map(({ categoryName, score }) => ({
-      categoryName,
+    return results.classifications[0].categories.map(({ categoryName, displayName, score }) => ({
+      categoryName: displayName || categoryName,
       score: (score * 100).toFixed(2),
     }));
   }

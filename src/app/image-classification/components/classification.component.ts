@@ -28,7 +28,7 @@ import { ImageClassificationResult } from '../types/image-classification.type';
     </div>
   `,
   styles: `
-    div {
+    div, select {
       margin-bottom: 1rem;      
     }
 
@@ -72,7 +72,6 @@ export class ClassificationComponent {
   }
  
   previewImage(event: Event) {
-    this.disableButtons.set(true);
     const reader = new FileReader();
 
     reader.onload = () => {
@@ -86,6 +85,7 @@ export class ClassificationComponent {
       && 'files' in event.target 
       && event.target.files instanceof FileList
       && event.target.files.length) {
+      this.disableButtons.set(true);
       reader.readAsDataURL(event.target.files[0]);
     }
   }

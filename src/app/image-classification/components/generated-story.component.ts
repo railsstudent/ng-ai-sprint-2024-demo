@@ -9,7 +9,7 @@ import { ImageClassificationResult } from '../types/image-classification.type';
     <div>
       <h3>Classifications:</h3>
       @for (result of results(); track result.categoryName) {
-        <p>{{ result.categoryName }}: {{ result.score }}</p>
+        <p>{{ result.categoryName }}: {{ result.score + '%' }}</p>
       }
       <h3>Prompt:</h3>
       <p><label>System:</label>{{ systemPrompt() }}</p>
@@ -48,6 +48,7 @@ export class GeneratedStoryComponent {
   story = input('Waiting for the story');
 
   categories = computed(() => this.results().map(({ categoryName }) => categoryName).join(','));
+  
   systemPrompt = computed(() => 
     'You are a professional storyteller with vivid imagination who can tell a story about given categories.'
   );
