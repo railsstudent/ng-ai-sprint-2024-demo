@@ -23,7 +23,7 @@ import { ImageClassificationResult } from '../types/image-classification.type';
 
       @let isDisabled = disableButtons();
       <button #btnImg (click)="openFileDialog()">Choose an image</button>
-      <button (click)="classify()" [disabled]="isDisabled">Classify the image</button>
+      <button (click)="classify()" [disabled]="isDisabled">{{ btnClassifyText() }}</button>
       <button (click)="generateStory()" [disabled]="isDisabled">Generate Story</button>
     </div>
   `,
@@ -62,6 +62,7 @@ export class ClassificationComponent {
 
   selectedModel = signal('EfficientNet-Lite0 model');
   disableButtons = signal(true);
+  btnClassifyText = signal('Classify the image');
 
   classificationResults = output<ImageClassificationResult[]>();
 
@@ -90,10 +91,19 @@ export class ClassificationComponent {
     }
   }
 
+  delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   classify() {
-    console.log('To be implemented');
-    const categories =this.service.classify(this.selectedModel(), this.imagePreview().nativeElement);
-    this.classificationResults.emit(categories);
+    this.disableButtons.set(true);
+    this.btnClassifyText.set('Classifying');
+    this.delay(1000).then(() => {
+      const categories =this.service.classify(this.selectedModel(), this.imagePreview().nativeElement);
+      this.classificationResults.emit(categories);
+      this.disableButtons.set(false);  
+      this.btnClassifyText.set('Classify a image');
+    });
   }
 
   generateStory() {
