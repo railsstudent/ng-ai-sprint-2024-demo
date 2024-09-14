@@ -8,6 +8,6 @@ export async function createImageClassifier(modelAssetPath: string): Promise<Ima
         modelAssetPath
       },
       maxResults: config.maxResults,
-      runningMode: config.runningMode === 'IMAGE' ? 'IMAGE' : 'VIDEO',
+      runningMode: 'IMAGE',
     });
 }
