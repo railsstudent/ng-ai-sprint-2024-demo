@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ImageClassificationService } from '../services/image-classification.service';
 import { ClassificationComponent } from './classification.component';
 import { GeneratedStoryComponent } from './generated-story.component';
 
@@ -25,9 +26,18 @@ import { GeneratedStoryComponent } from './generated-story.component';
       color: darkcyan;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClassificationContainerComponent {
   categories = signal('No categories classified.');
   story = signal('No story has generated.');
+
+  service = inject(ImageClassificationService);
+
+  constructor() {
+    // console.log(Object.keys(this.classifiers));
+    console.log('modelNames', this.service.modelNames());
+  }
+
+  // modelNames = computed(() => Object.keys(this.classifiers));
 }
