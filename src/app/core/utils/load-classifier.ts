@@ -29,6 +29,5 @@ export async function loadClassifiers() {
     classifierMap[name] = classifier;
   }
   
-  console.log('classifierMap', classifierMap);
   return classifierMap;
 }

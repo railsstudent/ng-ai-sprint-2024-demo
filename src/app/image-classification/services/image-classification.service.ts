@@ -1,5 +1,6 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { ImageClassifier } from '@mediapipe/tasks-vision';
+import { loadClassifiers } from '~app/core/utils/load-classifier';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,8 @@ export class ImageClassificationService {
   #classifierMap = signal<{ [key:string]: ImageClassifier }>({});
   modelNames = computed(() => Object.keys(this.#classifierMap()));
 
-  init(classifiers: { [key:string]: ImageClassifier }) {
+  async init() {
+    const classifiers = await loadClassifiers();
     this.#classifierMap.set(classifiers);
   }
 

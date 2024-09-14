@@ -10,7 +10,7 @@ import { GeneratedStoryComponent } from './generated-story.component';
   template: `
     <div>
       <h2 class="title">Storytelling by MediaPipe Image Classifier Task and Gemma 2</h2>
-      <app-classification />
+      <app-classification [models]="service.modelNames()" class="classification" />
       <app-generated-story [categories]="categories()" [story]="story()" /> 
     </div>
   `,
@@ -33,11 +33,4 @@ export class ClassificationContainerComponent {
   story = signal('No story has generated.');
 
   service = inject(ImageClassificationService);
-
-  constructor() {
-    // console.log(Object.keys(this.classifiers));
-    console.log('modelNames', this.service.modelNames());
-  }
-
-  // modelNames = computed(() => Object.keys(this.classifiers));
 }
