@@ -6,7 +6,6 @@ import { ClassificationContainerComponent } from './image-classification/compone
   standalone: true,
   imports: [ClassificationContainerComponent],
   template: '<app-classification-container />',
-  styles: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {}

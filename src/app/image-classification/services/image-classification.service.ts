@@ -1,6 +1,7 @@
 import { computed, Injectable, signal } from '@angular/core';
 import { ImageClassifier } from '@mediapipe/tasks-vision';
 import { loadClassifiers } from '~app/core/utils/load-classifier';
+import { ImageClassificationResult } from '../types/image-classification.type';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class ImageClassificationService {
     this.#classifierMap.set(classifiers);
   }
 
-  classify(modelName: string, source: TexImageSource) {
+  classify(modelName: string, source: TexImageSource): ImageClassificationResult[] {
     if (!this.#classifierMap()[modelName]) {
       throw new Error(`The model, ${modelName}, does not exist`);
     }
@@ -31,7 +32,7 @@ export class ImageClassificationService {
 
     return results.classifications[0].categories.map(({ categoryName, score }) => ({
       categoryName,
-      score,
+      score: (score * 100).toFixed(2),
     }));
   }
 }

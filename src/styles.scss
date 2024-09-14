@@ -9,4 +9,27 @@ body {
     width: 100vw;
     min-height: 100vh;
     font-family: "Times New Roman", Times, serif;
+    color: darkcyan;
+}
+
+button {
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+select {
+    padding: 0.25rem;
+    font-size: 0.8rem;
+}
+
+p {
+    font-size: 1rem;
+}
+
+h3 {
+    font-size: 1.15rem;
+}
+
+label {
+    margin-right: 0.25rem;
 }

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { ImageClassificationService } from '../services/image-classification.service';
 import { ClassificationComponent } from './classification.component';
 import { GeneratedStoryComponent } from './generated-story.component';
+import { ImageClassificationResult } from '../types/image-classification.type';
 
 @Component({
   selector: 'app-classification-container',
@@ -10,8 +11,9 @@ import { GeneratedStoryComponent } from './generated-story.component';
   template: `
     <div>
       <h2 class="title">Storytelling by MediaPipe Image Classifier Task and Gemma 2</h2>
-      <app-classification [models]="service.modelNames()" class="classification" />
-      <app-generated-story [categories]="categories()" [story]="story()" /> 
+      <app-classification [models]="service.modelNames()" class="classification" 
+        (classificationResults)="results.set($event)" />
+      <app-generated-story [results]="results()" [story]="story()" /> 
     </div>
   `,
   styles: `
@@ -29,7 +31,7 @@ import { GeneratedStoryComponent } from './generated-story.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClassificationContainerComponent {
-  categories = signal('No categories classified.');
+  results = signal<ImageClassificationResult[]>([]);
   story = signal('No story has generated.');
 
   service = inject(ImageClassificationService);

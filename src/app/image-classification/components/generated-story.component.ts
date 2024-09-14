@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ImageClassificationResult } from '../types/image-classification.type';
 
 @Component({
   selector: 'app-generated-story',
@@ -6,32 +7,33 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
   imports: [],
   template: `
     <div>
-    <h3>Categories:</h3>
-      <p>{{ categories() }}</p>
+      <h3>Classifications:</h3>
+      @for (result of results(); track result.categoryName) {
+        <p>{{ result.categoryName }}: {{ result.score }}</p>
+      }
       <h3>Prompt:</h3>
-      <p>{{ systemPrompt() }}</p>
+      <p><label>System:</label>{{ systemPrompt() }}</p>
       @let userPromptLines = userPrompt().split('\n');
       @for (prompt of userPromptLines; track $index) {
-        <p>{{ prompt }}</p>
+        <p>
+          @if ($index === 0) {
+            <label>User:</label>
+          }
+          {{ prompt }}
+        </p>
       }
       <h3>Story:</h3>
       <p>{{ story() }}</p>
     </div>
   `,
   styles: `
-    * {
-      color: darkcyan;
-    }
-
     p {
       margin-bottom: 0.25rem;
-      font-size: 1rem;
     }
 
     h3 {
       margin-bottom: 0.4rem;
       text-decoration: underline;
-      font-size: 1.15rem;
     }
 
     div {
@@ -42,15 +44,16 @@ import { ChangeDetectionStrategy, Component, computed, input } from '@angular/co
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GeneratedStoryComponent {
-  categories = input('No category');
+  results = input<ImageClassificationResult[]>([]);
   story = input('Waiting for the story');
 
+  categories = computed(() => this.results().map(({ categoryName }) => categoryName).join(','));
   systemPrompt = computed(() => 
-    'System: You are a professional storyteller with vivid imagination who can tell a story about given categories.'
+    'You are a professional storyteller with vivid imagination who can tell a story about given categories.'
   );
 
   userPrompt = computed(() =>  
-    `User: Please write a story with the following categories delimited by triple dashes:
+    `Please write a story with the following categories delimited by triple dashes:
     ---${this.categories()}---
 
     The story should be written in one paragraph, 300 words max.
