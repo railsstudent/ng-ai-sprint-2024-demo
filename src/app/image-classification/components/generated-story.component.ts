@@ -44,8 +44,8 @@ import { ImageClassificationResult } from '../types/image-classification.type';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GeneratedStoryComponent {
-  results = input<ImageClassificationResult[]>([]);
-  story = input('Waiting for the story');
+  results = input.required<ImageClassificationResult[]>();
+  story = input.required<string>();
 
   categories = computed(() => this.results().map(({ categoryName }) => categoryName).join(','));
   

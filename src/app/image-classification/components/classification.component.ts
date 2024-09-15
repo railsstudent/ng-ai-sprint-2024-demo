@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input
 import { FormsModule } from '@angular/forms';
 import { ImageClassificationService } from '../services/image-classification.service';
 import { ImageClassificationResult } from '../types/image-classification.type';
+import { StorytellingService } from '../services/storytelling.service';
 
 @Component({
   selector: 'app-classification',
@@ -21,10 +22,10 @@ import { ImageClassificationResult } from '../types/image-classification.type';
         <img #imagePreview />
       </div>
 
-      @let isDisabled = disableButtons();
+      @let isDisabled = buttonState().disabled();
       <button #btnImg (click)="openFileDialog()">Choose an image</button>
-      <button (click)="classify()" [disabled]="isDisabled">{{ btnClassifyText() }}</button>
-      <button (click)="generateStory()" [disabled]="isDisabled">Generate Story</button>
+      <button (click)="classify()" [disabled]="isDisabled">{{ buttonState().classifyText() }}</button>
+      <button (click)="generateStory()" [disabled]="isDisabled">{{ buttonState().generateText() }}</button>
     </div>
   `,
   styles: `
@@ -56,20 +57,31 @@ import { ImageClassificationResult } from '../types/image-classification.type';
 })
 export class ClassificationComponent {
   models = input.required<string[]>();
-
   fileInput = viewChild.required<ElementRef<HTMLInputElement>>('fileInput');
   imagePreview = viewChild.required<ElementRef<HTMLImageElement>>('imagePreview');
 
   selectedModel = signal('EfficientNet-Lite0 model');
-  disableButtons = signal(true);
-  btnClassifyText = signal('Classify the image');
+  categories = signal<string[]>([]);
+
+  buttonState = computed(() => ({
+    classifyText: signal('Classify the image'),
+    generateText: signal('Generate a story'),
+    disabled: signal(true),
+  }));
 
   classificationResults = output<ImageClassificationResult[]>();
+  story = output<string>();
 
-  service = inject(ImageClassificationService);
+  classificationService = inject(ImageClassificationService);
+  storytellingService = inject(StorytellingService);
 
   openFileDialog() {
     this.fileInput().nativeElement.click();
+  }
+
+  getFirstFile(event: Event) {
+    return event.target && 'files' in event.target && event.target.files instanceof FileList && event.target.files.length ?
+      event.target.files[0] : null;
   }
  
   previewImage(event: Event) {
@@ -78,35 +90,33 @@ export class ClassificationComponent {
     reader.onload = () => {
       if (reader.result && typeof reader.result === 'string') {
         this.imagePreview().nativeElement.src = reader.result;
-        this.disableButtons.set(false);
+        this.buttonState().disabled.set(false);
       }
     }
 
-    if (event.target
-      && 'files' in event.target 
-      && event.target.files instanceof FileList
-      && event.target.files.length) {
-      this.disableButtons.set(true);
-      reader.readAsDataURL(event.target.files[0]);
+    const file = this.getFirstFile(event);
+    if (file) {
+      this.buttonState().disabled.set(true);
+      reader.readAsDataURL(file);
     }
   }
 
-  delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
   classify() {
-    this.disableButtons.set(true);
-    this.btnClassifyText.set('Classifying');
-    this.delay(1000).then(() => {
-      const categories =this.service.classify(this.selectedModel(), this.imagePreview().nativeElement);
-      this.classificationResults.emit(categories);
-      this.disableButtons.set(false);  
-      this.btnClassifyText.set('Classify a image');
-    });
+    this.buttonState().disabled.set(true);
+    this.buttonState().classifyText.set('Classifying');
+    const categories =this.classificationService.classify(this.selectedModel(), this.imagePreview().nativeElement);
+    this.classificationResults.emit(categories);
+    this.categories.set(categories.map((item) => item.categoryName));
+    this.buttonState().classifyText.set('Classify a image');
+    this.buttonState().disabled.set(false);  
   }
 
-  generateStory() {
-    console.log('To be implemented');
+  async generateStory() {
+    this.buttonState().disabled.set(true);
+    this.buttonState().generateText.set('Generating...');
+    const story = await this.storytellingService.generateStory(this.categories());
+    this.story.emit(story);
+    this.buttonState().generateText.set('Generate a story');
+    this.buttonState().disabled.set(false);  
   }
 }
