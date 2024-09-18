@@ -11,11 +11,8 @@ import { ClassificationButtonsComponent } from './classification-buttons.compone
       <input type="file" #fileInput style="display: none;" accept=".jpg, .jpeg, .png" (change)="previewImage($event)" />
       <div id="imageContainer"><img #imagePreview /></div>
 
-      <button #btnImg (click)="openFileDialog()">Choose an image</button>
-      <app-classification-buttons [model]="selectedModel()" [imageSource]="imageElement()" 
-        [hasImage]="hasImage()" 
-        (classificationResults)="classificationResults.emit($event)" 
-        (story)="story.emit($event)" />
+      <app-classification-buttons [model]="model()" [imageSource]="imageElement()" [hasImage]="hasImage()" 
+        (openFileDialog)="openFileDialog()" (results)="results.emit($event)" (story)="story.emit($event)" />
     </div>
   `,
   styles: `
@@ -34,22 +31,18 @@ import { ClassificationButtonsComponent } from './classification-buttons.compone
       height: auto;
       max-width: none;
     }
-    
-    button {
-      margin-right: 0.25rem;
-    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PreviewImageComponent {
-  selectedModel = input.required<string>();
+  model = input.required<string>();
   fileInput = viewChild.required<ElementRef<HTMLInputElement>>('fileInput');
   imagePreview = viewChild.required<ElementRef<HTMLImageElement>>('imagePreview');
 
   hasImage = signal(false);
   imageElement = computed(() => this.imagePreview().nativeElement);
 
-  classificationResults = output<ImageClassificationResult[]>();
+  results = output<ImageClassificationResult[]>();
   story = output<string>();
 
   openFileDialog() {

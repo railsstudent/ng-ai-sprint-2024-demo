@@ -7,9 +7,9 @@ import { ImageClassificationResult } from '../types/image-classification.type';
   selector: 'app-classification-buttons',
   standalone: true,
   template: `
-    @let isDisabled = buttonState().disabled();
-    <button (click)="classify()" [disabled]="isDisabled">{{ buttonState().classifyText() }}</button>
-    <button (click)="generateStory()" [disabled]="isDisabled">{{ buttonState().generateText() }}</button>
+    <button (click)="openFileDialog.emit()">Choose an image</button>
+    <button (click)="classify()" [disabled]="buttonState().disabled()">{{ buttonState().classifyText() }}</button>
+    <button (click)="generateStory()" [disabled]="buttonState().disabled()">{{ buttonState().generateText() }}</button>
   `,
   styles: `
     button {
@@ -36,8 +36,9 @@ export class ClassificationButtonsComponent {
     disabled: signal(!this.hasImage()),
   }));
 
-  classificationResults = output<ImageClassificationResult[]>();
+  results = output<ImageClassificationResult[]>();
   story = output<string>();
+  openFileDialog = output();
 
   classificationService = inject(ImageClassificationService);
   storytellingService = inject(StorytellingService);
@@ -46,7 +47,7 @@ export class ClassificationButtonsComponent {
     this.buttonState().disabled.set(true);
     this.buttonState().classifyText.set('Classifying...');
     const categories =this.classificationService.classify(this.model(), this.imageSource());
-    this.classificationResults.emit(categories);
+    this.results.emit(categories);
     this.categories.set(categories.map((item) => item.categoryName));
     this.buttonState().classifyText.set('Classify the image');
     this.buttonState().disabled.set(false);  

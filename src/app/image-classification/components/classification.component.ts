@@ -14,7 +14,7 @@ import { PreviewImageComponent } from './preview-image.component';
         <option [value]="model">{{ model }}</option>
       }
     </select>
-    <app-preview-image [selectedModel]="selectedModel()" (classificationResults)="classificationResults.emit($event)"
+    <app-preview-image [model]="selectedModel()" (results)="results.emit($event)"
       (story)="story.emit($event)"
     />
   `,
@@ -29,6 +29,6 @@ export class ClassificationComponent {
   models = input.required<string[]>();
   selectedModel = signal('EfficientNet-Lite0 model');
 
-  classificationResults = output<ImageClassificationResult[]>();
+  results = output<ImageClassificationResult[]>();
   story = output<string>();
 }

@@ -12,7 +12,7 @@ import { ImageClassificationResult } from '../types/image-classification.type';
     <div>
       <h2 class="title">Storytelling by MediaPipe Image Classifier Task and Gemma 2</h2>
       <app-classification [models]="service.modelNames()" class="classification" 
-        (classificationResults)="results.set($event)" (story)="story.set($event)" />
+        (results)="results.set($event)" (story)="story.set($event)" />
       <app-generated-story [results]="results()" [story]="story()" /> 
     </div>
   `,
