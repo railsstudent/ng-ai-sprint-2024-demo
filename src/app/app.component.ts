@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ClassificationContainerComponent } from './image-classification/components';
 
 @Component({
@@ -8,4 +9,10 @@ import { ClassificationContainerComponent } from './image-classification/compone
   template: '<app-classification-container />',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent {}
+export class AppComponent {
+  title = inject(Title);
+
+  constructor() {
+    this.title.setTitle('Storytelling by MediaPipe Image Classifier Task');
+  }
+}
