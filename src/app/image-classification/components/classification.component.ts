@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, output, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ImageClassificationService } from '../services/image-classification.service';
-import { StorytellingService } from '../services/storytelling.service';
 import { ImageClassificationResult } from '../types/image-classification.type';
 import { PreviewImageComponent } from './preview-image.component';
 

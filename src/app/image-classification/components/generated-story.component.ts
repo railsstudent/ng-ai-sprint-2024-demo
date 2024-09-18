@@ -47,7 +47,7 @@ export class GeneratedStoryComponent {
   results = input.required<ImageClassificationResult[]>();
   story = input.required<string>();
 
-  categories = computed(() => this.results().map(({ categoryName }) => categoryName).join(','));
+  categories = computed(() => this.results().map(({ categoryName }) => categoryName).join(', '));
   
   systemPrompt = computed(() => 
     'You are a professional storyteller with vivid imagination who can tell a story about given categories.'

@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, output, signal, viewChild, WritableSignal } from '@angular/core';
-import { StorytellingService } from '../services/storytelling.service';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, output, signal, viewChild } from '@angular/core';
 import { ImageClassificationService } from '../services/image-classification.service';
+import { StorytellingService } from '../services/storytelling.service';
 import { ImageClassificationResult } from '../types/image-classification.type';
 
 @Component({
