@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { ImageClassificationService } from '../services/image-classification.service';
 import { StorytellingService } from '../services/storytelling.service';
-import { ImageClassificationResult } from '../types/image-classification.type';
+import { CategoryScore } from '../types/image-classification.type';
 
 @Component({
   selector: 'app-classification-buttons',
@@ -36,7 +36,7 @@ export class ClassificationButtonsComponent {
     disabled: signal(!this.hasImage()),
   }));
 
-  results = output<ImageClassificationResult[]>();
+  results = output<CategoryScore[]>();
   story = output<string>();
   openFileDialog = output();
 
@@ -46,9 +46,9 @@ export class ClassificationButtonsComponent {
   classify() {
     this.buttonState().disabled.set(true);
     this.buttonState().classifyText.set('Classifying...');
-    const categories =this.classificationService.classify(this.model(), this.imageSource());
-    this.results.emit(categories);
-    this.categories.set(categories.map((item) => item.categoryName));
+    const { categoryScores, categories } = this.classificationService.classify(this.model(), this.imageSource());
+    this.results.emit(categoryScores);
+    this.categories.set(categories);
     this.buttonState().classifyText.set('Classify the image');
     this.buttonState().disabled.set(false);  
   }

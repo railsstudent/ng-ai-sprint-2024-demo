@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, input, output, signal, viewChild } from '@angular/core';
-import { ImageClassificationResult } from '../types/image-classification.type';
+import { CategoryScore } from '../types/image-classification.type';
 import { ClassificationButtonsComponent } from './classification-buttons.component';
 
 @Component({
@@ -42,7 +42,7 @@ export class PreviewImageComponent {
   hasImage = signal(false);
   imageElement = computed(() => this.imagePreview().nativeElement);
 
-  results = output<ImageClassificationResult[]>();
+  results = output<CategoryScore[]>();
   story = output<string>();
 
   openFileDialog() {

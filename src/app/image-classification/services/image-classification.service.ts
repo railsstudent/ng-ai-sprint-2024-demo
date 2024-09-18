@@ -15,7 +15,7 @@ export class ImageClassificationService {
     this.#classifierMap.set(classifiers);
   }
 
-  classify(modelName: string, source: TexImageSource): ImageClassificationResult[] {
+  classify(modelName: string, source: TexImageSource): ImageClassificationResult {
     if (!this.#classifierMap()[modelName]) {
       throw new Error(`The model, ${modelName}, does not exist`);
     }
@@ -30,9 +30,16 @@ export class ImageClassificationService {
       throw new Error('No result.');
     }
 
-    return results.classifications[0].categories.map(({ categoryName, displayName, score }) => ({
+    const categoryScores =  results.classifications[0].categories.map(({ categoryName, displayName, score }) => ({
       categoryName: displayName || categoryName,
       score: (score * 100).toFixed(2),
     }));
+    
+    const categories = categoryScores.map((item) => item.categoryName);
+
+    return {
+      categoryScores,
+      categories,
+    };
   }
 }

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ImageClassificationResult } from '../types/image-classification.type';
+import { CategoryScore } from '../types/image-classification.type';
 import { PreviewImageComponent } from './preview-image.component';
 
 @Component({
@@ -29,6 +29,6 @@ export class ClassificationComponent {
   models = input.required<string[]>();
   selectedModel = signal('EfficientNet-Lite0 model');
 
-  results = output<ImageClassificationResult[]>();
+  results = output<CategoryScore[]>();
   story = output<string>();
 }

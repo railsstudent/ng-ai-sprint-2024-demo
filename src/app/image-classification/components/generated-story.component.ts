@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { ImageClassificationResult } from '../types/image-classification.type';
+import { CategoryScore } from '../types/image-classification.type';
 
 @Component({
   selector: 'app-generated-story',
@@ -44,7 +44,7 @@ import { ImageClassificationResult } from '../types/image-classification.type';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GeneratedStoryComponent {
-  results = input.required<ImageClassificationResult[]>();
+  results = input.required<CategoryScore[]>();
   story = input.required<string>();
 
   categories = computed(() => this.results().map(({ categoryName }) => categoryName).join(', '));
