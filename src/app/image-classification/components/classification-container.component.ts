@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { ImageClassificationService } from '../services/image-classification.service';
 import { ClassificationComponent } from './classification.component';
 import { GeneratedStoryComponent } from './generated-story.component';
-import { ImageClassificationResult } from '../types/image-classification.type';
+import { CategoryScore, ImageClassificationResult } from '../types/image-classification.type';
 
 @Component({
   selector: 'app-classification-container',
@@ -31,7 +31,7 @@ import { ImageClassificationResult } from '../types/image-classification.type';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClassificationContainerComponent {
-  results = signal<ImageClassificationResult[]>([]);
+  results = signal<CategoryScore[]>([]);
   story = signal('No story has generated.');
 
   service = inject(ImageClassificationService);
