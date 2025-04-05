@@ -24,7 +24,7 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 
 ## Change CORS policy of the GS Bucket
 
-Create a json file to configure the CORS policy of the public bucket. Then, this Angular application can load the model from the Google Clousd Storage. 
+Create a json file to configure the CORS policy of the public bucket. Then, this Angular application can load the model from the Google Cloud Storage. 
 
 ```json
 [
